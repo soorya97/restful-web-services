@@ -25,6 +25,8 @@ public class HelloWorldController {
 
 	///hello-world/path-variable/testVariable
 	//testVariable === {name}
+	//if we need to read the path variable, pass it as a argument with "@PathVariable" annotation"
+	//we can append or use string format -> String.format("string %s", variable);
 	@GetMapping(path = "/hello-world/path-variable/{name}")
 	public HelloWorldBean helloWorldPathVariable(@PathVariable String name){
 		return (new HelloWorldBean(String.format("Hello World %s", name)));
