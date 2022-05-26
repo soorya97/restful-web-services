@@ -31,7 +31,13 @@ public class UserResource {
 	//mentioning path is not needed as it is the default agrument
 	@GetMapping("/users/{id}")
 	public User retriveUser(@PathVariable int id){
-		return service.findOne(id);
+		User foundUser = service.findOne(id);
+		if(foundUser == null){
+			//if the user is not found, throw the custom exception with the needed message
+			throw (new UserNotFoundException("id-" + id));
+		}
+
+		return foundUser;
 	}
 
 	//POST /users
