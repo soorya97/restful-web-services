@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,5 +52,15 @@ public class UserResource {
 		// /user/{id} must be the URI of the newly created user
 		URI savedUserLocation = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getUserID()).toUri();
 		return ResponseEntity.created(savedUserLocation).build();
+	}
+
+	//DELETE /users/{id}
+	@DeleteMapping("/users/{id}")
+	public void deleteUser(@PathVariable int id){
+		User deletedUser = service.deleteByID(id);
+		if(deletedUser == null){
+			//if the user is not found, throw the custom exception with the needed message
+			throw (new UserNotFoundException("id-" + id));
+		}
 	}
 }
