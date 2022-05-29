@@ -5,7 +5,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+//import the static methods of WebMvcLinkBuilder - to use them
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,15 +37,24 @@ public class UserResource {
 
 	//GET /users/{id}
 	//mentioning path is not needed as it is the default agrument
+	//HATEOAS will help us to return links along with the response - EntityModel<User> will be the return type
 	@GetMapping("/users/{id}")
-	public User retriveUser(@PathVariable int id){
+	public EntityModel<User> retriveUser(@PathVariable int id){
 		User foundUser = service.findOne(id);
 		if(foundUser == null){
 			//if the user is not found, throw the custom exception with the needed message
 			throw (new UserNotFoundException("id-" + id));
 		}
 
-		return foundUser;
+		//We must create a enity model on the found user
+		//create a WebMvcLinkBuilder, linkTo the medthod of this class and the method that we need
+		//[These are static methods that are defined in WebMvcLinkBuilder]
+		//model.add(linkToUsers.withRel("all-users")) - will be out custom key message in the response
+		EntityModel<User> model = EntityModel.of(foundUser);
+		WebMvcLinkBuilder linkToUsers = linkTo(methodOn(this.getClass()).retriveAllUsers());
+		model.add(linkToUsers.withRel("all-users"));
+
+		return model;
 	}
 
 	//POST /users
