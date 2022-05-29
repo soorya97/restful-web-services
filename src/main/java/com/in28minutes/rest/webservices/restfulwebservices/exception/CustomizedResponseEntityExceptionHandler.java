@@ -2,8 +2,10 @@ package com.in28minutes.rest.webservices.restfulwebservices.exception;
 
 import java.util.Date;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +36,15 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	public final ResponseEntity<Object> handleUserNotFoundExceptions(UserNotFoundException exception, WebRequest request){
 		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(), request.getDescription(false));
 		return (new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND));
+	}
+
+	//to make sure that we return our custom message and the response code,
+	//we need to override this method
+	//we can pass in the message and the exception.getBindingResult().toString()
+	//set the response as BAD_REQUEST
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Validation Failed", exception.getBindingResult().toString());
+		return (new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST));
 	}
 }

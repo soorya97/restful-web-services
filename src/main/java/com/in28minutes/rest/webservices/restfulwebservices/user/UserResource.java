@@ -3,6 +3,8 @@ package com.in28minutes.rest.webservices.restfulwebservices.user;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,8 +47,9 @@ public class UserResource {
 	//response code must be - CREATED
 	//input - details of user
 	//output - CREATED status & return the created URI
+	//to validate the user, we can annotate it with @valid - done by java validation API
 	@PostMapping("/users")
-	public ResponseEntity<Object> createUser(@RequestBody User user){
+	public ResponseEntity<Object> createUser(@Valid @RequestBody User user){
 		User savedUser = service.save(user);
 
 		// /user/{id} must be the URI of the newly created user
