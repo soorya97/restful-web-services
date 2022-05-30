@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloWorldController {
 	//Spring will automatically map the message source with app the available messages*.properties files
-	//messages.properties -> Default
+	//messages.properties -> Default + English Locale
 	//messages_fr.properties -> French Locale
 	@Autowired
 	private MessageSource messageSource;
