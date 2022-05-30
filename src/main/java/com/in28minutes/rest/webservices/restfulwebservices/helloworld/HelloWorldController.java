@@ -1,5 +1,8 @@
 package com.in28minutes.rest.webservices.restfulwebservices.helloworld;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,6 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 //First thing to do, Say to the Spring that this is a Controller
 @RestController
 public class HelloWorldController {
+	//Spring will automatically map the message source with app the available messages*.properties files
+	//messages.properties -> Default
+	//messages_fr.properties -> French Locale
+	@Autowired
+	private MessageSource messageSource;
 
 	//GET method
 	//URI - /hello-world
@@ -30,5 +38,18 @@ public class HelloWorldController {
 	@GetMapping(path = "/hello-world/path-variable/{name}")
 	public HelloWorldBean helloWorldPathVariable(@PathVariable String name){
 		return (new HelloWorldBean(String.format("Hello World %s", name)));
+	}
+
+	@GetMapping(path = "/hello-world-internationalized")
+	public String helloWorldInternationalized(){
+		//en = Hellow World
+		//fr = Bonjour
+
+		//use messageSource.getMessage,
+		//give these params
+		//  1. key
+		//  2. args if any, else null
+		//  3. Locale of the browser or the client - [will be en or fr etc.]
+		return messageSource.getMessage("good.morning.message", null, LocaleContextHolder.getLocale());
 	}
 }
