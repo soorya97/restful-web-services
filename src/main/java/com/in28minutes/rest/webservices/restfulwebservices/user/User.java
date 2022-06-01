@@ -1,10 +1,12 @@
 package com.in28minutes.rest.webservices.restfulwebservices.user;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
@@ -25,6 +27,11 @@ public class User {
 	//This is validate that the birthDate is always in the past
 	@Past(message = "BIRTH DATE must be in the past")
 	private Date birthDate;
+
+	//since this many post will be associated with a single user, it must be a OneToMany
+	//slso, the mapping must be user - this is the variable set in the Post entity
+	@OneToMany(mappedBy = "user")
+	private List<Post> posts;
 
 	public User(Integer userID, String name, Date birthDate) {
 		this.userID = userID;
@@ -67,5 +74,13 @@ public class User {
 				", name='" + name + '\'' +
 				", birthDate=" + birthDate +
 				'}';
+	}
+
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 }
