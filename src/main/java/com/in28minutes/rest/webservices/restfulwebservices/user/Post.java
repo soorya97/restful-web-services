@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Post {
 
@@ -15,10 +17,11 @@ public class Post {
 
 	private String description;
 
-	//To avoid dead lock, let the fetch type be LAZY
+	//To avoid dead lock, let the fetch type be LAZY and we must ignore this via JsonIgnore
 	//else the user will try to fetch the post & the post will try to fetch the user
 	//since this many post will be associated with a single user, it must be a ManyToOne
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	private User user;
 
 	public Post(Integer ID, String description, User user) {
