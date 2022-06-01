@@ -2,10 +2,20 @@ package com.in28minutes.rest.webservices.restfulwebservices.user;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+//to make this bean as the entity, make it @Entity
+@Entity
 public class User {
+
+	//For making this as primary key
+	@Id
+	//For auto generation of values
+	@GeneratedValue
 	private Integer userID;
 
 	//This is validate that the size of name will be >= 2
@@ -20,6 +30,10 @@ public class User {
 		this.userID = userID;
 		this.name = name;
 		this.birthDate = birthDate;
+	}
+
+	public User() {
+
 	}
 
 	public Integer getUserID() {
